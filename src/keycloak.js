@@ -8,7 +8,7 @@ const keycloak = new Keycloak({
 
 const initializeKeycloak = async () => {
     try {
-        const authenticated = await keycloak.init({ onLoad: 'login-required' }); // 'login-required'로 설정
+        const authenticated = await keycloak.init({ onLoad: 'login-required' }); //로그인 필수
         console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
         if (!authenticated) {
             keycloak.login(); // 인증되지 않았을 경우 로그인 페이지로 리다이렉트
@@ -18,4 +18,8 @@ const initializeKeycloak = async () => {
     }
 };
 
-export { keycloak, initializeKeycloak };
+const logout = () => {
+    keycloak.logout();
+};
+
+export { keycloak, initializeKeycloak, logout };
