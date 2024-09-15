@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // 리다이렉트를 위해 useNavigate 훅을 사용
 import { keycloakService } from './keycloakService'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function NewPost() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -27,6 +29,9 @@ function NewPost() {
       if (!response.ok) {
         throw new Error('Failed to create post');
       }
+
+      alert('글이 성공적으로 작성되었습니다.');
+      navigate('/posts');
 
     } catch (error) {
       console.error('Error creating post:', error);

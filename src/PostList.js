@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { keycloakService } from './keycloakService';
+import { useNavigate } from 'react-router-dom';
 
 function PostList() {  
   const [posts, setPosts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -35,8 +37,26 @@ function PostList() {
     fetchPosts();
   }, []);
 
+  const handleCreatePost = () => {
+    navigate('/posts/new');
+  };
+
+  const handleLogout = () => {
+    keycloakService.logout();
+  };
+
   return (
     <div className="container my-3">
+      {keycloakService.getToken() && (
+        <div className="d-flex justify-content-end mb-3">
+          <button className="btn btn-primary me-2" onClick={handleCreatePost}>
+            글 작성
+          </button>
+          <button className="btn btn-secondary" onClick={handleLogout}>
+            로그 아웃
+          </button>
+        </div>
+      )}
       <table className="table">
         <thead className="table-dark">
           <tr><th>번호</th><th>제목</th><th>작성자</th><th>작성일시</th></tr>

@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import PostList from './PostList';
 import NewPost from './NewPost';
 import Home from './Home';
-import { keycloakService } from './keycloakService';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App({ authenticated }) {
@@ -15,9 +14,6 @@ function App({ authenticated }) {
           <Route path="/posts" element={authenticated ? <PostList /> : <Navigate to="/" />} />
           <Route path="/posts/new" element={authenticated ? <NewPost /> : <Navigate to="/" />} />
         </Routes>
-        {authenticated && (
-          <button onClick={() => keycloakService.logout()}>Logout</button>
-        )}
       </div>
     </Router>
   );
