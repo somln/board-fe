@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { keycloak } from './keycloak';  
+import { keycloakAdapter } from './keycloak';
 
 function PostList() {  
   const [posts, setPosts] = useState([]);
@@ -8,14 +8,17 @@ function PostList() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const token =  keycloak.token;
+        const token = keycloakAdapter.getToken();
+        if (!token) {
+          throw new Error('No token available');
+        }
+
         const response = await fetch('http://localhost:8080/api/posts?sort=desc', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `bearer ${token}` 
+            'Authorization': `Bearer ${token}`
           },
-          withCredentials: false
         });
 
         if (!response.ok) {
