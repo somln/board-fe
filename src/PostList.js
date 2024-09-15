@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { keycloakAdapter } from './keycloak';
+import { keycloakService } from './keycloakService';
 
 function PostList() {  
   const [posts, setPosts] = useState([]);
@@ -8,7 +8,7 @@ function PostList() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const token = keycloakAdapter.getToken();
+        const token = keycloakService.getToken();
         if (!token) {
           throw new Error('No token available');
         }
@@ -39,12 +39,7 @@ function PostList() {
     <div className="container my-3">
       <table className="table">
         <thead className="table-dark">
-          <tr>
-            <th>번호</th>
-            <th>제목</th>
-            <th>작성자</th> {/* 작성자 추가 */}
-            <th>작성일시</th>
-          </tr>
+          <tr><th>번호</th><th>제목</th><th>작성자</th><th>작성일시</th></tr>
         </thead>
         <tbody>
           {posts.map((post, index) => (
@@ -53,7 +48,7 @@ function PostList() {
               <td>
                 <a href={`/post/detail/${post.postId}`}>{post.title}</a>
               </td>
-              <td>{post.username}</td> {/* 작성자 추가 */}
+              <td>{post.username}</td> 
               <td>{new Date(post.createdAt).toLocaleString()}</td>
             </tr>
           ))}

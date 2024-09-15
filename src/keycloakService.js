@@ -1,19 +1,15 @@
 import Keycloak from 'keycloak-js';
 
-class KeycloakAdapter {
+class KeycloakService {
     
     constructor(config) {
-        if (!KeycloakAdapter.instance) {
-            this.keycloak = new Keycloak(config);
-            KeycloakAdapter.instance = this;
-        }
-        return KeycloakAdapter.instance;
+        this.keycloak = new Keycloak(config);
     }
 
     async initialize() {
         try {
             const authenticated = await this.keycloak.init({ onLoad: 'login-required' });
-            console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`); // 백틱(`) 사용
+            console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
             if (authenticated) {
                 sessionStorage.setItem('token', this.keycloak.token);
             } else {
@@ -25,7 +21,7 @@ class KeycloakAdapter {
     }
 
     getToken() {
-        return sessionStorage.getItem('token'); // 이 부분에서 오타 수정
+        return sessionStorage.getItem('token'); 
     }
 
     logout() {
@@ -40,6 +36,6 @@ const keycloakConfig = {
     clientId: 'main_client'
 };
 
-const keycloakAdapter = new KeycloakAdapter(keycloakConfig);
+const keycloakService = new KeycloakService(keycloakConfig);
 
-export { keycloakAdapter };
+export { keycloakService };

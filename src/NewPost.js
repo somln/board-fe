@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { keycloakAdapter } from './keycloak'; // 수정된 import
+import { keycloakService } from './keycloakService'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function NewPost() {
@@ -10,7 +10,7 @@ function NewPost() {
     event.preventDefault();
 
     try {
-      const token = keycloakAdapter.getToken(); // 수정된 호출
+      const token = keycloakService.getToken();
       if (!token) {
         throw new Error('No token available');
       }
@@ -28,7 +28,6 @@ function NewPost() {
         throw new Error('Failed to create post');
       }
 
-      // Handle successful post creation
     } catch (error) {
       console.error('Error creating post:', error);
     }
