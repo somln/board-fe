@@ -1,20 +1,23 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import PostList from './PostList';
 import NewPost from './NewPost';
-import { keycloakService } from './keycloakService'; 
+import Home from './Home';
+import { keycloakService } from './keycloakService';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App() {
-
+function App({ authenticated }) {
   return (
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/posts" element={<PostList />} />
-          <Route path="/posts/new" element={<NewPost />} />
+          <Route path="/" element={authenticated ? <Navigate to="/posts" /> : <Home />} />
+          <Route path="/posts" element={authenticated ? <PostList /> : <Navigate to="/" />} />
+          <Route path="/posts/new" element={authenticated ? <NewPost /> : <Navigate to="/" />} />
         </Routes>
-        <button onClick={() => keycloakService.logout()}>Logout</button> 
+        {authenticated && (
+          <button onClick={() => keycloakService.logout()}>Logout</button>
+        )}
       </div>
     </Router>
   );
