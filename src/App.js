@@ -3,16 +3,17 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import PostList from './PostList';
 import NewPost from './NewPost';
 import Home from './Home';
+import PrivateRoute from './components/PrivateRoute';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function App({ authenticated }) {
+function App() {
   return (
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={authenticated ? <Navigate to="/posts" /> : <Home />} />
-          <Route path="/posts" element={authenticated ? <PostList /> : <Navigate to="/" />} />
-          <Route path="/posts/new" element={authenticated ? <NewPost /> : <Navigate to="/" />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/posts" element={<PrivateRoute><PostList /></PrivateRoute>} />
+          <Route path="/posts/new" element={<PrivateRoute><NewPost /></PrivateRoute>} />
         </Routes>
       </div>
     </Router>

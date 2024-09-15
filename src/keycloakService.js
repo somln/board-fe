@@ -18,10 +18,10 @@ class KeycloakService {
     }
   }
 
-  login() {
-    this.keycloak.login();
+ login() {
+    this.keycloak.login({ redirectUri: window.location.origin + '/posts' });
   }
-
+  
   register() {
     this.keycloak.register();
   }
