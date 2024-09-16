@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import axios from 'axios';
 import { keycloakService } from './keycloakService';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,19 +11,13 @@ function PostList() {
   
   const fetchPosts = async () => {
     try {
-      const response = await fetch('http://localhost:8080/api/posts?sort=desc', {
-        method: 'GET',
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/posts?sort=desc`, {
         headers: {
           'Content-Type': 'application/json',
         },
       });
   
-      if (!response.ok) {
-        throw new Error('Failed to fetch posts');
-      }
-  
-      const result = await response.json();
-      setPosts(result.data.posts);
+      setPosts(response.data.data.posts);
     } catch (error) {
       console.error('Error fetching posts:', error);
     }
@@ -67,7 +62,7 @@ function PostList() {
               글 작성
             </button>
             <button className="btn btn-secondary" onClick={handleLogout}>
-              로그 아웃
+              로그아웃
             </button>
           </>
         ) : (
@@ -87,9 +82,9 @@ function PostList() {
           <tr><th>번호</th><th>제목</th><th>작성자</th><th>작성일시</th></tr>
         </thead>
         <tbody>
-          {posts.map((post) => (
+          {posts.map((post, index) => (
             <tr key={post.postId}>
-              <td>{post.postId}</td>
+              <td>{posts.length - index}</td>
               <td>
                 <span 
                   onClick={() => handlePostClick(post.postId)} 

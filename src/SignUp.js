@@ -21,7 +21,7 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:8080/api/users/signup', formData);
+      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/users/signup`, formData);
       alert('회원가입이 완료되었습니다.');
       navigate('/'); 
     } catch (error) {
