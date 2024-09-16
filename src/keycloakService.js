@@ -1,6 +1,7 @@
 import Keycloak from 'keycloak-js';
 
 class KeycloakService {
+  
   constructor(config) {
     this.keycloak = new Keycloak(config);
   }
@@ -10,7 +11,7 @@ class KeycloakService {
       const authenticated = await this.keycloak.init({ onLoad: 'check-sso' });
       console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
       if (authenticated) {
-        sessionStorage.setItem('token', this.keycloak.token);
+        sessionStorage.setItem('token', this.keycloak.token); 
       }
       return authenticated;
     } catch (error) {
@@ -19,11 +20,7 @@ class KeycloakService {
   }
 
  login() {
-    this.keycloak.login({ redirectUri: window.location.origin + '/posts' });
-  }
-  
-  register() {
-    this.keycloak.register();
+    this.keycloak.login();
   }
 
   getToken() {
@@ -34,6 +31,8 @@ class KeycloakService {
     this.keycloak.logout();
     sessionStorage.removeItem('token');
   }
+
+  isLoggedIn = () => this.keycloak.token;
 }
 
 const keycloakConfig = {

@@ -1,22 +1,20 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import {Route, Routes} from 'react-router-dom';
 import PostList from './PostList';
 import NewPost from './NewPost';
-import Home from './Home';
 import PrivateRoute from './components/PrivateRoute';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import SignUp from './SignUp';
 
 function App() {
   return (
-    <Router>
       <div className="App">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/posts" element={<PrivateRoute><PostList /></PrivateRoute>} />
+          <Route path="/" element={<PostList />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/posts/new" element={<PrivateRoute><NewPost /></PrivateRoute>} />
         </Routes>
       </div>
-    </Router>
   );
 }
 

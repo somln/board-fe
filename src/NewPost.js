@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // 리다이렉트를 위해 useNavigate 훅을 사용
+import { useNavigate } from 'react-router-dom'; 
 import { keycloakService } from './keycloakService'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
