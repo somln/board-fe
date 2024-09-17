@@ -68,8 +68,8 @@ function NewPost() {
             required
           />
         </div>
-        <button type="submit" className="btn btn-primary me-2">완료</button>
-        <button type="button" className="btn btn-secondary" onClick={handleCancel}>취소</button>
+        <button type="submit" className="btn btn-secondary me-2">완료</button>
+        <button type="button" className="btn btn-dark" onClick={handleCancel}>취소</button>
       </form>
     </div>
   );

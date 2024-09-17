@@ -58,19 +58,19 @@ function PostList() {
       <div className="d-flex justify-content-end mb-3">
         {isAuthenticated ? (
           <>
-            <button className="btn btn-primary me-2" onClick={handleCreatePost}>
+            <button className="btn btn-secondary me-2" onClick={handleCreatePost}>
               글 작성
             </button>
-            <button className="btn btn-secondary" onClick={handleLogout}>
+            <button className="btn btn-dark" onClick={handleLogout}>
               로그아웃
             </button>
           </>
         ) : (
           <>
-            <button className="btn btn-primary me-2" onClick={handleLogin}>
+            <button className="btn btn-secondary me-2" onClick={handleLogin}>
               로그인
             </button>
-            <button className="btn btn-secondary" onClick={handleRegister}>
+            <button className="btn btn-dark" onClick={handleRegister}>
               회원가입
             </button>
           </>
