@@ -4,10 +4,12 @@ import CommentList from './CommentList';
 import { keycloakService } from '../keycloakService';
 import axios from "axios";
 
-function Comment({ postId, user }) {
+function CommentWrapper({ postId, user }) {
+
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
 
+    //댓글 조회
     useEffect(() => {
         const fetchComments = async () => {
             try {
@@ -31,6 +33,8 @@ function Comment({ postId, user }) {
         fetchComments();
     }, [postId]);
 
+
+    //댓글 작성
     const handleCommentSubmit = async (event) => {
         event.preventDefault();
 
@@ -67,6 +71,7 @@ function Comment({ postId, user }) {
         }
     };
 
+    //댓글 삭제
     const handleDeleteComment = async (commentId) => {
         const confirmed = window.confirm('정말로 이 댓글을 삭제하시겠습니까?');
         if (!confirmed) {
@@ -97,15 +102,17 @@ function Comment({ postId, user }) {
         }
     };
 
-    const handleUpdateComment = async (commentId) => {
+    //댓글 수정
+    const handleUpdateComment = async (commentId, newContent) => {
         try {
             const token = keycloakService.getToken();
             if (!token) {
                 throw new Error('No token available');
             }
-
-            await axios.delete(
+    
+            await axios.put(
                 `${process.env.REACT_APP_API_BASE_URL}/api/comments/${commentId}`,
+                { content: newContent },
                 {
                     headers: {
                         'Content-Type': 'application/json',
@@ -113,8 +120,9 @@ function Comment({ postId, user }) {
                     }
                 }
             );
-
+    
             alert('댓글이 수정되었습니다.');
+    
             const commentResponse = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/posts/${postId}/comments`, {
                 headers: {
                     'Content-Type': 'application/json',
@@ -122,7 +130,7 @@ function Comment({ postId, user }) {
                 },
             });
             setComments(commentResponse.data.data);
-
+    
         } catch (error) {
             console.error('Error updating comment:', error);
         }
@@ -145,4 +153,4 @@ function Comment({ postId, user }) {
     );
 }
 
-export default Comment;
+export default CommentWrapper;

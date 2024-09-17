@@ -88,7 +88,7 @@ function PostList() {
               <td>
                 <span 
                   onClick={() => handlePostClick(post.postId)} 
-                  style={{ cursor: 'pointer', color: 'blue', textDecoration: 'underline' }}>
+                  style={{ cursor: 'pointer', textDecoration: 'underline' }}>
                   {post.title}
                 </span>
               </td>

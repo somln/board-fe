@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { keycloakService } from './keycloakService';
 import axios from "axios";
-import Comment from './components/Comment';
+import CommentWrapper from './components/CommentWrapper';
 
 function PostDetail() {
     const { postId } = useParams();
@@ -98,7 +98,7 @@ function PostDetail() {
                     <p className="card-text" style={{ whiteSpace: 'pre-line' }}>{post.content}</p>
                     <hr style={{ borderTop: '3px solid #000' }} />
                     <h5 className="mb-4">댓글</h5>
-                    <Comment postId={postId} user={user} />
+                    <CommentWrapper postId={postId} user={user} />
                 </div>
             </div>
         </div>
