@@ -23,46 +23,52 @@ function SignUp() {
     try {
       await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/users/signup`, formData);
       alert('회원가입이 완료되었습니다.');
-      navigate('/'); 
+      navigate('/');
     } catch (error) {
-      console.error('회원가입 실패:', error);
-      alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+      if (error.response.data.errorMessage) {
+        if (error.response.data.errorMessage.includes('username')) {
+          alert('이미 존재하는 사용자 이름입니다. 다른 이름을 사용해주세요.');
+        } else if (error.response.data.errorMessage.includes('email')) {
+          alert('이미 존재하는 이메일입니다. 다른 이메일을 사용해주세요.');
+        } else {
+          alert(error.response.data.errorMessage);
+        }
+      } else {
+        console.error('회원가입 실패:', error);
+        alert('회원가입에 실패했습니다. 다시 시도해주세요.');
+      }
     }
   };
+  
   return (
-    <div className="container mt-5">  {/* 중앙 정렬 및 상단 여백 */}
-      <div className="row justify-content-center">  {/* 수평 중앙 정렬 */}
-        <div className="col-md-6">  {/* 화면의 50% 차지 */}
-          <div className="card">  {/* 카드 스타일 */}
-            <div className="card-body">  {/* 카드 본문 */}
-              <h2 className="card-title text-center mb-4">회원가입</h2>  {/* 중앙 정렬 및 하단 여백 */}
-              <form onSubmit={handleSubmit}>
-                <div className="form-group mb-3">  {/* 입력 그룹 및 하단 여백 */}
-                  <label htmlFor="username">사용자명:</label>
-                  <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} className="form-control" required /> 
-                </div>
-                <div className="form-group mb-3">
-                  <label htmlFor="email">이메일:</label>
-                  <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="form-control" required />
-                </div>
-                <div className="form-group mb-3">
-                  <label htmlFor="name">이름:</label>
-                  <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className="form-control" required />
-                </div>
-                <div className="form-group mb-3">
-                  <label htmlFor="password">비밀번호:</label>
-                  <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} className="form-control" required />
-                </div>
-                <div className="d-grid gap-2">  
-                  <button type="submit" className="btn btn-primary">가입하기</button>  
-                  <button type="button" onClick={() => navigate(-1)} className="btn btn-secondary">취소</button>  
-                </div>
-              </form>
-            </div>
+    <div className="container mt-5 border" style={{ maxWidth: '600px' }}>
+      <div className="row justify-content-center">
+        <h2 className=" text-center mb-4 mt-4 ">회원가입</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group mb-3">
+            <label htmlFor="username">사용자명:</label>
+            <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} className="form-control" required />
           </div>
-        </div>
+          <div className="form-group mb-3">
+            <label htmlFor="email">이메일:</label>
+            <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="form-control" required />
+          </div>
+          <div className="form-group mb-3">
+            <label htmlFor="name">이름:</label>
+            <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className="form-control" required />
+          </div>
+          <div className="form-group mb-3">
+            <label htmlFor="password">비밀번호:</label>
+            <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} className="form-control" required />
+          </div>
+          <div className="d-grid gap-2">
+            <button type="submit" className="btn btn-dark">가입하기</button>
+            <button type="button" onClick={() => navigate(-1)} className="btn btn-secondary">취소</button>
+          </div>
+        </form>
       </div>
     </div>
+
   );
 }
 
