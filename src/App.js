@@ -7,6 +7,7 @@ import PrivateRoute from './components/PrivateRoute';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SignUp from './SignUp';
 import EditPost from './EditPost';
+import SearchResults from './SearchResults';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/" element={<PostList />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/posts/new" element={<PrivateRoute><NewPost /></PrivateRoute>} />
+        <Route path="/search" element={<SearchResults />} />
         <Route path="/posts/:postId" element={<PrivateRoute><PostDetail /></PrivateRoute>} />
         <Route path="/edit-post/:postId" element={<PrivateRoute><EditPost /></PrivateRoute>} />
       </Routes>

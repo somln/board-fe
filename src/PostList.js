@@ -5,7 +5,6 @@ import { keycloakService } from './keycloakService';
 import { useNavigate } from 'react-router-dom';
 
 function PostList() {
-
   const [posts, setPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
@@ -17,37 +16,21 @@ function PostList() {
           'Content-Type': 'application/json',
         },
       });
-
       setPosts(response.data.data.posts);
     } catch (error) {
       console.error('Error fetching posts:', error);
     }
   };
 
-  const handleSearch = async (event) => {
+  const handleSearch = (event) => {
     event.preventDefault();
-
-    try {
-      const token = keycloakService.getToken();
-      if (!token) {
-        throw new Error('No token available');
-      }
-
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/posts/search?q=${searchTerm}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-
-      setPosts(response.data.data || []);  
-    } catch (error) {
-      console.error('Error searching posts:', error);
+    if (searchTerm.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchTerm)}`); // 쿼리 파라미터 형식으로 검색어 전달
     }
   };
 
   useEffect(() => {
-    fetchPosts();
+    fetchPosts(); // 처음에 전체 게시글 로드
   }, []);
 
   const handleCreatePost = () => {
