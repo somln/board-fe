@@ -7,8 +7,9 @@ import { useNavigate } from 'react-router-dom';
 function PostList() {
 
   const [posts, setPosts] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
-  
+
   const fetchPosts = async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/posts?sort=desc`, {
@@ -16,17 +17,39 @@ function PostList() {
           'Content-Type': 'application/json',
         },
       });
-  
+
       setPosts(response.data.data.posts);
     } catch (error) {
       console.error('Error fetching posts:', error);
     }
   };
-  
+
+  const handleSearch = async (event) => {
+    event.preventDefault();
+
+    try {
+      const token = keycloakService.getToken();
+      if (!token) {
+        throw new Error('No token available');
+      }
+
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/posts/search?q=${searchTerm}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      setPosts(response.data.data || []);  
+    } catch (error) {
+      console.error('Error searching posts:', error);
+    }
+  };
+
   useEffect(() => {
     fetchPosts();
   }, []);
-  
+
   const handleCreatePost = () => {
     navigate('/posts/new');
   };
@@ -55,6 +78,16 @@ function PostList() {
 
   return (
     <div className="container my-3">
+      <form className="d-flex mb-3" onSubmit={handleSearch}>
+        <input
+           type="text"
+           placeholder="검색어 입력"
+           value={searchTerm}
+           onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <button className="btn btn-secondary ms-2" type="submit">검색</button>
+      </form>
+
       <div className="d-flex justify-content-end mb-3">
         {isAuthenticated ? (
           <>
@@ -76,7 +109,7 @@ function PostList() {
           </>
         )}
       </div>
-      
+
       <table className="table">
         <thead className="table-dark">
           <tr><th>번호</th><th>제목</th><th>작성자</th><th>작성일시</th></tr>
@@ -86,13 +119,13 @@ function PostList() {
             <tr key={post.postId}>
               <td>{posts.length - index}</td>
               <td>
-                <span 
-                  onClick={() => handlePostClick(post.postId)} 
+                <span
+                  onClick={() => handlePostClick(post.postId)}
                   style={{ cursor: 'pointer', textDecoration: 'underline' }}>
                   {post.title}
                 </span>
               </td>
-              <td>{post.username}</td> 
+              <td>{post.username}</td>
               <td>{new Date(post.createdAt).toLocaleString()}</td>
             </tr>
           ))}
