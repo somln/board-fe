@@ -12,19 +12,13 @@ function SearchResults() {
   useEffect(() => {
     const fetchSearchResults = async () => {
       try {
-        const token = keycloakService.getToken();
-        if (!token) {
-          throw new Error('No token available');
-        }
-
         const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/posts/search?q=${encodeURIComponent(query)}`, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
           },
         });
 
-        setPosts(response.data.data.posts);
+        setPosts(response.data.data);
       } catch (error) {
         console.error('Error fetching search results:', error);
       }

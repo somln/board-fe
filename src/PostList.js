@@ -7,16 +7,26 @@ import { useNavigate } from 'react-router-dom';
 function PostList() {
   const [posts, setPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [currentPage, setCurrentPage] = useState(0); 
+  const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
+  const pageSize = 10; 
 
-  const fetchPosts = async () => {
+  const fetchPosts = async (page) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/posts?sort=desc`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/posts`, {
+        params: {
+          page: page,
+          size: pageSize,
+          sort: 'desc',
+        },
         headers: {
           'Content-Type': 'application/json',
         },
       });
       setPosts(response.data.data.posts);
+      setTotalPages(response.data.data.totalPageNumber);
+      setCurrentPage(response.data.data.nowPageNumber);
     } catch (error) {
       console.error('Error fetching posts:', error);
     }
@@ -25,13 +35,17 @@ function PostList() {
   const handleSearch = (event) => {
     event.preventDefault();
     if (searchTerm.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchTerm)}`); // 쿼리 파라미터 형식으로 검색어 전달
+      navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
     }
   };
 
+  const handlePageChange = (page) => {
+    fetchPosts(page); 
+  };
+
   useEffect(() => {
-    fetchPosts(); // 처음에 전체 게시글 로드
-  }, []);
+    fetchPosts(currentPage); 
+  }, [currentPage]);
 
   const handleCreatePost = () => {
     navigate('/posts/new');
@@ -63,10 +77,10 @@ function PostList() {
     <div className="container my-3">
       <form className="d-flex mb-3" onSubmit={handleSearch}>
         <input
-           type="text"
-           placeholder="검색어 입력"
-           value={searchTerm}
-           onChange={(e) => setSearchTerm(e.target.value)}
+          type="text"
+          placeholder="검색어 입력"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
         <button className="btn btn-secondary ms-2" type="submit">검색</button>
       </form>
@@ -114,6 +128,18 @@ function PostList() {
           ))}
         </tbody>
       </table>
+
+      <nav aria-label="Page navigation">
+        <ul className="pagination justify-content-center">
+          {[...Array(totalPages).keys()].map((page) => (
+            <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
+              <button className="page-link" onClick={() => handlePageChange(page)}>
+                {page + 1} 
+              </button>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </div>
   );
 }
