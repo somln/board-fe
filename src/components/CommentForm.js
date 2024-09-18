@@ -3,7 +3,7 @@ import React from 'react';
 function CommentForm({ newComment, setNewComment, handleCommentSubmit }) {
     return (
         <form onSubmit={handleCommentSubmit} className="d-flex mb-5">
-            <input
+            <textarea
                 type="text"
                 className="form-control me-2"
                 id="newComment"

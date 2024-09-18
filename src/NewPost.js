@@ -1,17 +1,13 @@
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { keycloakService } from './keycloakService';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import PostForm from './components/PostForm';
 
 function NewPost() {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
+  const handleSubmit = async ({ title, content }) => {
     try {
       const token = keycloakService.getToken();
       if (!token) {
@@ -44,34 +40,10 @@ function NewPost() {
   };
 
   return (
-    <div className="container my-3">
-      <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <input
-            type="text"
-            className="form-control"
-            id="title"
-            value={title}
-            placeholder="제목"
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-3">
-          <textarea
-            className="form-control"
-            id="content"
-            rows="5"
-            value={content}
-            placeholder="내용을 입력하세요."
-            onChange={(e) => setContent(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" className="btn btn-secondary me-2">완료</button>
-        <button type="button" className="btn btn-dark" onClick={handleCancel}>취소</button>
-      </form>
-    </div>
+    <PostForm 
+      onSubmit={handleSubmit}
+      onCancel={handleCancel}
+    />
   );
 }
 

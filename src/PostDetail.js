@@ -73,13 +73,17 @@ function PostDetail() {
         }
     };
 
+    const handleEditPost = () => {
+        navigate(`/edit-post/${postId}`);
+    };
+
     return (
         <div className="container my-3 border border-secondary">
             <div className="d-flex justify-content-between mt-3 mb-3">
                 <h3 className="mb-3">{post.title}</h3>
                 {user.userId === post.userId && (
                     <div className="d-flex">
-                        <button className="btn btn-secondary me-2">수정</button>
+                        <button className="btn btn-secondary me-2" onClick={handleEditPost}>수정</button>
                         <button className="btn btn-dark" onClick={handleDeletePost}>삭제</button>
                     </div>
                 )}
