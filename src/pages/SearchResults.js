@@ -6,7 +6,7 @@ import { keycloakService } from '../keycloakService';
 
 function SearchResults() {
   const [searchParams] = useSearchParams(); 
-  const query = searchParams.get('q'); 
+  const query = searchParams.get('q'); //파라미터의 q 값을 저장
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
 

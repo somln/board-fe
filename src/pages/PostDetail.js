@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { postApi, userApi } from '../api'; // api.js에서 가져옴
+import { postApi, userApi } from '../api'; 
 import CommentWrapper from '../components/CommentWrapper';
 
 
@@ -34,7 +34,7 @@ function PostDetail() {
         }
 
         try {
-            await postApi.deletePost(postId); // postApi 사용
+            await postApi.deletePost(postId); 
             alert('게시글이 삭제되었습니다.');
             navigate('/');
         } catch (error) {
@@ -50,7 +50,7 @@ function PostDetail() {
         <div className="container my-3 border border-secondary">
             <div className="d-flex justify-content-between mt-3 mb-3">
                 <h3 className="mb-3">{post.title}</h3>
-                {user.userId === post.userId && (
+                {user.userId === post.userId && ( //로그인한 사용자가 게시글 작성자일 경우 수정, 삭제 버튼 보임
                     <div className="d-flex">
                         <button className="btn btn-secondary me-2" onClick={handleEditPost}>수정</button>
                         <button className="btn btn-dark" onClick={handleDeletePost}>삭제</button>
@@ -69,7 +69,7 @@ function PostDetail() {
                 <hr style={{ borderTop: '3px solid #000' }} />
                 <p className="card-text" style={{ whiteSpace: 'pre-line' }}>{post.content}</p>
                 <hr style={{ borderTop: '3px solid #000' }} />
-                <h5 className="mb-4">댓글</h5>
+                <h5 className="mb-4">댓글</h5>  {/* postId로 댓글 불러오기*/}
                 <CommentWrapper postId={postId} user={user} />
             </div>
         </div>

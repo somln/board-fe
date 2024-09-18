@@ -15,7 +15,7 @@ function SignUp() {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({ ...formData, [e.target.name]: e.target.value }); // 이전 상태를 복사한 후, 변경된 필드만 업데이트
   };
 
   const handleSubmit = async (e) => {

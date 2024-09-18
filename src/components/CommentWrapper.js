@@ -22,7 +22,7 @@ function CommentWrapper({ postId, user }) {
         fetchComments();
     }, [postId]);
 
-    // 댓글 작성
+    // 댓글 작성 핸들러
     const handleCommentSubmit = async (event) => {
         event.preventDefault();
 
@@ -31,7 +31,7 @@ function CommentWrapper({ postId, user }) {
             alert('댓글이 성공적으로 작성되었습니다.');
             setNewComment('');
 
-            const commentResponse = await commentApi.getComments(postId);
+            const commentResponse = await commentApi.getComments(postId);   //작성 후 재 조회
             setComments(commentResponse.data.data);
 
         } catch (error) {
@@ -39,7 +39,7 @@ function CommentWrapper({ postId, user }) {
         }
     };
 
-    // 댓글 삭제
+    // 댓글 삭제 핸들러
     const handleDeleteComment = async (commentId) => {
         const confirmed = window.confirm('정말로 이 댓글을 삭제하시겠습니까?');
         if (!confirmed) {
@@ -49,20 +49,20 @@ function CommentWrapper({ postId, user }) {
         try {
             await commentApi.deleteComment(commentId);
             alert('댓글이 삭제되었습니다.');
-            setComments(comments.filter(comment => comment.commentId !== commentId));
+            setComments(comments.filter(comment => comment.commentId !== commentId));  //나머지 댓글로 상태 업데이트
 
         } catch (error) {
             console.error('Error deleting comment:', error);
         }
     };
 
-    // 댓글 수정
+    // 댓글 수정 핸들러
     const handleUpdateComment = async (commentId, newContent) => {
         try {
             await commentApi.updateComment(commentId, { content: newContent });
             alert('댓글이 수정되었습니다.');
 
-            const commentResponse = await commentApi.getComments(postId);
+            const commentResponse = await commentApi.getComments(postId);  //수정 후 재 조회
             setComments(commentResponse.data.data);
 
         } catch (error) {

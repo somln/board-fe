@@ -15,8 +15,8 @@ function App() {
       <Routes>
         <Route path="/" element={<PostList />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/search" element={<SearchResults />} />
         <Route path="/posts/new" element={<PrivateRoute><NewPost /></PrivateRoute>} />
-        <Route path="/search" element={<PrivateRoute><SearchResults /></PrivateRoute>} />
         <Route path="/posts/:postId" element={<PrivateRoute><PostDetail /></PrivateRoute>} />
         <Route path="/edit-post/:postId" element={<PrivateRoute><EditPost /></PrivateRoute>} />
       </Routes>

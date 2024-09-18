@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { postApi } from '../api'; // api.js에서 가져옴
+import { postApi } from '../api'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PostForm from '../components/PostForm';
 
@@ -12,9 +12,9 @@ function EditPost() {
 
   useEffect(() => {
     const fetchPost = async () => {
-      try {
-        const response = await postApi.getPostById(postId); // postApi 사용
-        setInitialTitle(response.data.data.title);
+      try { // 수정하기 이전에 저장되어 있던 게시글 내용 조회
+        const response = await postApi.getPostById(postId); 
+        setInitialTitle(response.data.data.title);  
         setInitialContent(response.data.data.content);
       } catch (error) {
         console.error('Error fetching post:', error);
@@ -26,7 +26,7 @@ function EditPost() {
 
   const handleSubmit = async ({ title, content }) => {
     try {
-      await postApi.updatePost(postId, { title, content }); // postApi 사용
+      await postApi.updatePost(postId, { title, content });
       alert('글이 성공적으로 수정되었습니다.');
       navigate(`/posts/${postId}`);
     } catch (error) {

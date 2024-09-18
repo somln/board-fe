@@ -12,7 +12,7 @@ function PostTable({ posts, handlePostClick }) {
             <td>{posts.length - index}</td>
             <td>
               <span
-                onClick={() => handlePostClick(post.postId)}
+                onClick={() => handlePostClick(post.postId)}  // 게시글 제목 클릭 시 게시글 상세페이지로
                 style={{ cursor: 'pointer', textDecoration: 'underline' }}>
                 {post.title}
               </span>

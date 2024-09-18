@@ -8,9 +8,11 @@ class KeycloakService {
 
   async initialize() {
     try {
-      const authenticated = await this.keycloak.init({ onLoad: 'check-sso' });
+      // Keycloak을 초기화하고, SSO를 체크함. 사용자 인증 여부를 반환
+      const authenticated = await this.keycloak.init({ onLoad: 'check-sso' });  
       console.log(`User is ${authenticated ? 'authenticated' : 'not authenticated'}`);
-      if (authenticated) {
+      
+      if (authenticated) {  // 인증된 경우, 토큰을 sessionStorage에 저장
         sessionStorage.setItem('token', this.keycloak.token); 
       }
       return authenticated;
@@ -51,9 +53,9 @@ class KeycloakService {
 }
 
 const keycloakConfig = {
-  url: 'http://localhost:8180',
-  realm: 'board',
-  clientId: 'main_client'
+  url: process.env.REACT_APP_KEYCLOAK_URL, 
+  realm: process.env.REACT_APP_KEYCLOAK_REALM, 
+  clientId: process.env.REACT_APP_KEYCLOAK_CLIENT_ID 
 };
 
 const keycloakService = new KeycloakService(keycloakConfig);

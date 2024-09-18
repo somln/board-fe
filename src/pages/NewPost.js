@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { postApi } from '../api'; // api.js에서 가져옴
+import { postApi } from '../api'; 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import PostForm from '../components/PostForm';
 
@@ -8,7 +8,7 @@ function NewPost() {
 
   const handleSubmit = async ({ title, content }) => {
     try {
-      await postApi.createPost({ title, content }); // postApi 사용
+      await postApi.createPost({ title, content }); 
 
       alert('글이 성공적으로 작성되었습니다.');
       navigate('/');

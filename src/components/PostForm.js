@@ -7,7 +7,7 @@ function PostForm({ initialTitle = '', initialContent = '', onSubmit, onCancel }
   useEffect(() => {
     setTitle(initialTitle);
     setContent(initialContent);
-  }, [initialTitle, initialContent]);
+  }, [initialTitle, initialContent]);  //게시글을 수정할 경우 initial 값이 필요
 
   const handleSubmit = (event) => {
     event.preventDefault();
