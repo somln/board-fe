@@ -7,18 +7,19 @@ import { useNavigate } from 'react-router-dom';
 function PostList() {
   const [posts, setPosts] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [currentPage, setCurrentPage] = useState(0); 
+  const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+  const [sortOrder, setSortOrder] = useState('desc'); 
   const navigate = useNavigate();
-  const pageSize = 10; 
+  const pageSize = 10;
 
-  const fetchPosts = async (page) => {
+  const fetchPosts = async (page, sortOrder) => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/posts`, {
         params: {
           page: page,
           size: pageSize,
-          sort: 'desc',
+          sort: sortOrder, 
         },
         headers: {
           'Content-Type': 'application/json',
@@ -40,12 +41,17 @@ function PostList() {
   };
 
   const handlePageChange = (page) => {
-    fetchPosts(page); 
+    fetchPosts(page, sortOrder);  
+  };
+
+  const handleSortChange = (event) => {
+    setSortOrder(event.target.value); 
+    fetchPosts(currentPage, event.target.value); 
   };
 
   useEffect(() => {
-    fetchPosts(currentPage); 
-  }, [currentPage]);
+    fetchPosts(currentPage, sortOrder);
+  }, [currentPage, sortOrder]);
 
   const handleCreatePost = () => {
     navigate('/posts/new');
@@ -75,36 +81,44 @@ function PostList() {
 
   return (
     <div className="container my-3">
-      <form className="d-flex mb-3" onSubmit={handleSearch}>
-        <input
-          type="text"
-          placeholder="검색어 입력"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <button className="btn btn-secondary ms-2" type="submit">검색</button>
-      </form>
 
-      <div className="d-flex justify-content-end mb-3">
-        {isAuthenticated ? (
-          <>
-            <button className="btn btn-secondary me-2" onClick={handleCreatePost}>
-              글 작성
-            </button>
-            <button className="btn btn-dark" onClick={handleLogout}>
-              로그아웃
-            </button>
-          </>
-        ) : (
-          <>
-            <button className="btn btn-secondary me-2" onClick={handleLogin}>
-              로그인
-            </button>
-            <button className="btn btn-dark" onClick={handleRegister}>
-              회원가입
-            </button>
-          </>
-        )}
+      <div className="d-flex justify-content-between mb-3">
+        <select className="form-select w-auto mt-3" value={sortOrder} onChange={handleSortChange}>
+          <option value="desc">최신순</option>
+          <option value="asc">오래된 순</option>
+        </select>
+
+        <form className="d-flex mt-3" onSubmit={handleSearch}>
+          <input
+            type="text"
+            placeholder="검색어 입력"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button className="btn btn-secondary ms-2" type="submit">검색</button>
+        </form>
+
+        <div className="d-flex justify-content-end">
+          {isAuthenticated ? (
+            <>
+              <button className="btn btn-secondary me-2 mt-3" onClick={handleCreatePost}>
+                글 작성
+              </button>
+              <button className="btn btn-dark mt-3" onClick={handleLogout}>
+                로그아웃
+              </button>
+            </>
+          ) : (
+            <>
+              <button className="btn btn-secondary me-2 mt-3" onClick={handleLogin}>
+                로그인
+              </button>
+              <button className="btn btn-dark mt-3" onClick={handleRegister}>
+                회원가입
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       <table className="table">
@@ -134,7 +148,7 @@ function PostList() {
           {[...Array(totalPages).keys()].map((page) => (
             <li key={page} className={`page-item ${currentPage === page ? 'active' : ''}`}>
               <button className="page-link" onClick={() => handlePageChange(page)}>
-                {page + 1} 
+                {page + 1}
               </button>
             </li>
           ))}
