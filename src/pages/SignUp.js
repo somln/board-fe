@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { userApi } from '../api';
 import { useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -21,11 +21,11 @@ function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/users/signup`, formData);
+      await userApi.signUp(formData); 
       alert('회원가입이 완료되었습니다.');
       navigate('/');
     } catch (error) {
-      if (error.response.data.errorMessage) {
+      if (error.response && error.response.data && error.response.data.errorMessage) {
         if (error.response.data.errorMessage.includes('username')) {
           alert('이미 존재하는 사용자 이름입니다. 다른 이름을 사용해주세요.');
         } else if (error.response.data.errorMessage.includes('email')) {
@@ -39,27 +39,59 @@ function SignUp() {
       }
     }
   };
-  
+
   return (
     <div className="container mt-5 border" style={{ maxWidth: '600px' }}>
       <div className="row justify-content-center">
-        <h2 className=" text-center mb-4 mt-4 ">회원가입</h2>
+        <h2 className="text-center mb-4 mt-4">회원가입</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group mb-3">
             <label htmlFor="username">사용자명:</label>
-            <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} className="form-control" required />
+            <input 
+              type="text" 
+              id="username" 
+              name="username" 
+              value={formData.username} 
+              onChange={handleChange} 
+              className="form-control" 
+              required 
+            />
           </div>
           <div className="form-group mb-3">
             <label htmlFor="email">이메일:</label>
-            <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="form-control" required />
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              value={formData.email} 
+              onChange={handleChange} 
+              className="form-control" 
+              required 
+            />
           </div>
           <div className="form-group mb-3">
             <label htmlFor="name">이름:</label>
-            <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} className="form-control" required />
+            <input 
+              type="text" 
+              id="name" 
+              name="name" 
+              value={formData.name} 
+              onChange={handleChange} 
+              className="form-control" 
+              required 
+            />
           </div>
           <div className="form-group mb-3">
             <label htmlFor="password">비밀번호:</label>
-            <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} className="form-control" required />
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              value={formData.password} 
+              onChange={handleChange} 
+              className="form-control" 
+              required 
+            />
           </div>
           <div className="d-grid gap-2">
             <button type="submit" className="btn btn-dark">가입하기</button>
@@ -68,7 +100,6 @@ function SignUp() {
         </form>
       </div>
     </div>
-
   );
 }
 

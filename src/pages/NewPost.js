@@ -1,28 +1,14 @@
 import { useNavigate } from 'react-router-dom';
-import { keycloakService } from './keycloakService';
-import axios from 'axios';
+import { postApi } from '../api'; // api.js에서 가져옴
 import 'bootstrap/dist/css/bootstrap.min.css';
-import PostForm from './components/PostForm';
+import PostForm from '../components/PostForm';
 
 function NewPost() {
   const navigate = useNavigate();
 
   const handleSubmit = async ({ title, content }) => {
     try {
-      const token = keycloakService.getToken();
-      if (!token) {
-        throw new Error('No token available');
-      }
-
-      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/posts`, 
-        { title, content }, 
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        }
-      );
+      await postApi.createPost({ title, content }); // postApi 사용
 
       alert('글이 성공적으로 작성되었습니다.');
       navigate('/');

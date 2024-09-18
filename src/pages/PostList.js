@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import axios from 'axios';
-import { keycloakService } from './keycloakService';
 import { useNavigate } from 'react-router-dom';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { postApi } from '../api'; 
+import { keycloakService } from '../keycloakService';
+import PostTable from '../components/PostTable'; 
 
 function PostList() {
   const [posts, setPosts] = useState([]);
@@ -15,16 +16,7 @@ function PostList() {
 
   const fetchPosts = async (page, sortOrder) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/posts`, {
-        params: {
-          page: page,
-          size: pageSize,
-          sort: sortOrder, 
-        },
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await postApi.getPosts(page, pageSize, sortOrder); 
       setPosts(response.data.data.posts);
       setTotalPages(response.data.data.totalPageNumber);
       setCurrentPage(response.data.data.nowPageNumber);
@@ -78,26 +70,26 @@ function PostList() {
   };
 
   const isAuthenticated = !!keycloakService.isLoggedIn();
-
   return (
     <div className="container my-3">
-
       <div className="d-flex justify-content-between mb-3">
-        <select className="form-select w-auto mt-3" value={sortOrder} onChange={handleSortChange}>
-          <option value="desc">최신순</option>
-          <option value="asc">오래된 순</option>
-        </select>
-
-        <form className="d-flex mt-3" onSubmit={handleSearch}>
-          <input
-            type="text"
-            placeholder="검색어 입력"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <button className="btn btn-secondary ms-2" type="submit">검색</button>
-        </form>
-
+        <div className="d-flex">
+          <select className="form-select w-auto mt-3 me-4" value={sortOrder} onChange={handleSortChange}>
+            <option value="desc">최신순</option>
+            <option value="asc">오래된 순</option>
+          </select>
+  
+          <form className="d-flex mt-3" onSubmit={handleSearch}>
+            <input
+              type="text"
+              placeholder="검색어 입력"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <button className="btn btn-secondary ms-2" type="submit">검색</button>
+          </form>
+        </div>
+ 
         <div className="d-flex justify-content-end">
           {isAuthenticated ? (
             <>
@@ -120,29 +112,9 @@ function PostList() {
           )}
         </div>
       </div>
-
-      <table className="table">
-        <thead className="table-dark">
-          <tr><th>번호</th><th>제목</th><th>작성자</th><th>작성일시</th></tr>
-        </thead>
-        <tbody>
-          {posts.map((post, index) => (
-            <tr key={post.postId}>
-              <td>{posts.length - index}</td>
-              <td>
-                <span
-                  onClick={() => handlePostClick(post.postId)}
-                  style={{ cursor: 'pointer', textDecoration: 'underline' }}>
-                  {post.title}
-                </span>
-              </td>
-              <td>{post.username}</td>
-              <td>{new Date(post.createdAt).toLocaleString()}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
+  
+      <PostTable posts={posts} handlePostClick={handlePostClick} />
+  
       <nav aria-label="Page navigation">
         <ul className="pagination justify-content-center">
           {[...Array(totalPages).keys()].map((page) => (

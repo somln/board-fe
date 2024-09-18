@@ -1,13 +1,13 @@
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import PostList from './PostList';
-import NewPost from './NewPost';
-import PostDetail from './PostDetail';
+import PostList from './pages/PostList';
+import NewPost from './pages/NewPost';
+import PostDetail from './pages/PostDetail';
 import PrivateRoute from './components/PrivateRoute';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import SignUp from './SignUp';
-import EditPost from './EditPost';
-import SearchResults from './SearchResults';
+import SignUp from './pages/SignUp';
+import EditPost from './pages/EditPost';
+import SearchResults from './pages/SearchResults';
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
         <Route path="/" element={<PostList />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/posts/new" element={<PrivateRoute><NewPost /></PrivateRoute>} />
-        <Route path="/search" element={<SearchResults />} />
+        <Route path="/search" element={<PrivateRoute><SearchResults /></PrivateRoute>} />
         <Route path="/posts/:postId" element={<PrivateRoute><PostDetail /></PrivateRoute>} />
         <Route path="/edit-post/:postId" element={<PrivateRoute><EditPost /></PrivateRoute>} />
       </Routes>
